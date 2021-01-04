@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, flash, session
 from models import User, db, connect_db
 from forms import NewUserForm, LoginForm
 
+
 app = Flask(__name__)
 # TODO- Add db name to link below
 app.config['SECRET_KEY'] = "whatever"
