@@ -3,6 +3,12 @@
 {% block title %} New User Registration  {% endblock %}
 
 {% block content %}
+<h2>New User Registration</h2>
+
+{% for msg in get_flashed_messages() %}
+<div>{{ msg }}</div>
+{% endfor %}
+
 <form action="/register" method="POST">
     {{ form.hidden_tag() }}
 
@@ -16,6 +22,11 @@
         {% endfor %}
     </div>
     {% endfor %}
+    <div class="form-buttons">
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+    </div>
+        
 </form>
 {% endblock %}
 

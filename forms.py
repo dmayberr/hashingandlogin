@@ -1,4 +1,3 @@
-from flask.app import Flask
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import InputRequired, Email
@@ -12,6 +11,7 @@ class NewUserForm(FlaskForm):
     first_name = StringField("First name")
     last_name = StringField("Last name")
     
+    
 class LoginForm(FlaskForm):
     """Form for handling user login information."""
     
@@ -19,3 +19,4 @@ class LoginForm(FlaskForm):
                            validators=[InputRequired()])
     password = StringField("Password",
                            validators=[Email()])
+   
