@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} New User Registration  {% endblock %}
+{% block title %} User Login  {% endblock %}
 
 {% block content %}
 <form action="/register" method="POST">
@@ -13,9 +13,9 @@
 
         {% for error in field.errors %}
         {{ error }}
-        {% endfor %}
+    {% endfor %}
     </div>
     {% endfor %}
+    {{ SubmitInput() }}
 </form>
 {% endblock %}
-
