@@ -1,12 +1,14 @@
 from flask import Flask, request, render_template, redirect, flash, session
 from models import User, db, connect_db
 from forms import NewUserForm, LoginForm
+from flask_bcrypt import Bcrypt
 
+bcrypt = Bcrypt()
 
 app = Flask(__name__)
-# TODO- Add db name to link below
+
 app.config['SECRET_KEY'] = "whatever"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///*****'  
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///UserDB'  
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 
