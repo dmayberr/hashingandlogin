@@ -1,7 +1,8 @@
 from flask import Flask, request, render_template, redirect, flash, session
 from models import User, db, connect_db
-from forms import NewUserForm, LoginForm
+from forms import NewUserForm, LoginForm, DeleteForm
 from flask_bcrypt import Bcrypt
+from werkzeug.exceptions import Unauthorized
 
 bcrypt = Bcrypt()
 
@@ -17,7 +18,7 @@ connect_db(app)
 
 @app.route('/')
 def root():    
-    return redirect (f"/register")
+    return render_template("home.html")
     
 @app.route('/register')
 def show_registration_form():
@@ -25,11 +26,12 @@ def show_registration_form():
     
     form = NewUserForm()
     
-    return render_template('new_user_form.html', form=form)
+    return render_template('users/new_user_form.html', form=form)
 
 @app.route('/register', methods=['POST'])
 def submit_new_user():
     """Handle submission of new user form."""
+    
     form = NewUserForm()
     
     if form.validate_on_submit():
@@ -38,10 +40,16 @@ def submit_new_user():
         email = form.email.data
         first_name = form.first_name.data
         last_name = form.last_name.data
+        
+        user = User.register(username, password, email, first_name, last_name)
+        
+        db.session.commit()
+        session['username'] = user.username
+        
         flash(f"User created.")
-        return redirect(f"/secret")
+        return redirect(f"/users/{user.username}")
     else:
-        return render_template("new_user_form.html", form=form)
+        return render_template("users/new_user_form.html", form=form)
         
     
 
@@ -49,9 +57,12 @@ def submit_new_user():
 def login():
     """Route will render a user login form accepting username and password."""
     
+    if "username" in session:
+        return redirect(f"/users/{session['username']}")
+    
     form = LoginForm()
     
-    return render_template('login_form.html', form=form)
+    return render_template('users/user_login_form.html', form=form)
 
 @app.route('/login', methods=['POST'])
 def handle_login():
@@ -62,10 +73,35 @@ def handle_login():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
-    
-    return redirect (f"/secret")
+        user = User.authenticate(username, password)
+        if user:
+            session['username'] = user.username
+            return redirect(f"/users/{user.username}")
+        else:
+            form.username.errors = ["Invalid username or password."]
+            return render_template("users/user_login_form.html", form=form)
+        
+    return render_template("users/user_login_form.html", form=form)
 
 @app.route('/secret')
-def secret():
-    
-    return (f"You made it!")
+def secret():    
+    return render_template('secret.html')
+
+@app.route("/logout")
+def logout():
+    """Logout route."""
+
+    session.pop("username")
+    return redirect("/login")
+
+@app.route("/users/<username>")
+def show_user(username):
+    """Example page for logged-in-users."""
+
+    if "username" not in session or username != session['username']:
+        raise Unauthorized()
+
+    user = User.query.get(username)
+    form = DeleteForm()
+
+    return render_template("users/show.html", user=user, form=form)

@@ -17,40 +17,47 @@ class User(db.Model):
     
     def __repr__(self):
         u = self
-        return f"<id={u.id}"
-    
-    username = db.Column(db.String(20),
-                         primary_key=True,
+        return f"<id={u.username}"    
+   
+    username = db.Column(db.Text,
+                         primary_key=True,                         
                          unique=True,
                          )
-    password = db.Column(db.String(20),
+    password = db.Column(db.Text,
                          nullable=False,
                          )
-    email = db.Column(db.String(50),
+    email = db.Column(db.Text,
                       nullable=False)
-    first_name = db.Column(db.String(30),
+    first_name = db.Column(db.Text,
                            nullable=False)
-    last_name = db.Column(db.String(30),
+    last_name = db.Column(db.Text,
                            nullable=False)
     
     @classmethod
-    def register(cls, username, password):
+    def register(cls, username, pw, email, first_name, last_name):
         """Register and create new user with hashed pw."""
         
-        hashed = bcrypt.generate_password_hash(password)
+        hashed = bcrypt.generate_password_hash(pw)
         hashed_utf8 = hashed.decode("utf8")
-        
-        return cls(username=username, password=hashed_utf8)
+        user = cls(
+            username=username,
+            password=hashed_utf8,
+            email=email,
+            first_name=first_name,
+            last_name=last_name
+        )
+        db.session.add(user)        
+        return user
     
     @classmethod
     def authenticate(cls, username, password):
         """Authenticate username and password."""
         
-        u = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first()
         
-        if u and bcrypt.check_password_hash(u.password, password):
+        if user and bcrypt.check_password_hash(user.password, password):
             # return user instance
-            return u
+            return user
         else:
             return False       
         

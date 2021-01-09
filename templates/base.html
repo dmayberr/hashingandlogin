@@ -13,13 +13,18 @@
 <body>
     <div class="container">
         <nav class="navbar navbar-expand-sm fixed-top navbar-dark bg-dark">
-            <a class="navbar-brand" href="#" style="padding-left: 25px;">Classified</a>
+            <a class="navbar-brand" href="/" style="padding-left: 2em;">Classified</a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item">
                     <a class="nav-link" href="/login">Login</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/register">New User</a>
+                </li>
+                <li>
+                    {% for msg in get_flashed_messages() %}
+                    <div>{{ msg }}</div>
+                    {% endfor %}
                 </li>
             </ul>
         </nav>
