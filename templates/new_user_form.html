@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} New User Registration  {% endblock %}
+{% block title %} New User Registration {% endblock %}
 
 {% block content %}
 <h2>New User Registration</h2>
@@ -9,7 +9,8 @@
 <div>{{ msg }}</div>
 {% endfor %}
 
-<form action="/register" method="POST">
+<form action="/register" method="POST" style="margin-top: 2em;">
+    <h1>New User Registration</h1>
     {{ form.hidden_tag() }}
 
     {% for field in form if field.widget.input_type != 'hidden' %}
@@ -26,7 +27,6 @@
         <button type="submit">Submit</button>
         <button type="reset">Reset</button>
     </div>
-        
+
 </form>
 {% endblock %}
-
