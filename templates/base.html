@@ -22,16 +22,17 @@
                     <a class="nav-link" href="/register">New User</a>
                 </li>
                 <li>
-                    {% for msg in get_flashed_messages() %}
-                    <div>{{ msg }}</div>
-                    {% endfor %}
+
                 </li>
             </ul>
         </nav>
     </div>
-    <div class="container">
-        {% block content %}
+    <div class="container" style="margin-top: 2em">
+        {% for msg in get_flashed_messages() %}
+        <div>{{ msg }}</div>
+        {% endfor %}
 
+        {% block content %}
 
         {% endblock %}
     </div>

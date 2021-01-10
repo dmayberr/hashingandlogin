@@ -47,26 +47,16 @@ def submit_new_user():
         session['username'] = user.username
         
         flash(f"User created.")
-        return redirect(f"/users/{user.username}")
+        return redirect(f"users/{user.username}")
     else:
-        return render_template("users/new_user_form.html", form=form)
-        
-    
+        return render_template("users/new_user_form.html", form=form)    
 
-@app.route('/login')
-def login():
-    """Route will render a user login form accepting username and password."""
+@app.route('/login', methods=['GET', 'POST'])
+def handle_login():
+    """Route to show login form or handle submission of login information"""
     
     if "username" in session:
         return redirect(f"/users/{session['username']}")
-    
-    form = LoginForm()
-    
-    return render_template('users/user_login_form.html', form=form)
-
-@app.route('/login', methods=['POST'])
-def handle_login():
-    """Route to handle submission of login information"""
     
     form = LoginForm()
     
@@ -81,7 +71,9 @@ def handle_login():
             form.username.errors = ["Invalid username or password."]
             return render_template("users/user_login_form.html", form=form)
         
-    return render_template("users/user_login_form.html", form=form)
+    return render_template('users/user_login_form.html', form=form)
+        
+    
 
 @app.route('/secret')
 def secret():    
@@ -104,4 +96,4 @@ def show_user(username):
     user = User.query.get(username)
     form = DeleteForm()
 
-    return render_template("users/show.html", user=user, form=form)
+    return render_template("users/user_show.html", user=user, form=form)
