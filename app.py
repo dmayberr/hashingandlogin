@@ -118,6 +118,7 @@ def new_feedback(username):
     """Show add-feedback form and process it."""
 
     if "username" not in session or username != session['username']:
+        flash("You must be logged in to view content.")
         raise Unauthorized()
 
     form = FeedbackForm()
@@ -148,6 +149,7 @@ def update_feedback(feedback_id):
     feedback = Feedback.query.get(feedback_id)
 
     if "username" not in session or feedback.username != session['username']:
+        flash("You must be logged in to view content.")
         raise Unauthorized()
 
     form = FeedbackForm(obj=feedback)
