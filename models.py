@@ -33,6 +33,8 @@ class User(db.Model):
     last_name = db.Column(db.Text,
                            nullable=False)
     
+    feedback = db.relationship("Feedback", backref="user", cascade="all,delete")
+    
     @classmethod
     def register(cls, username, pw, email, first_name, last_name):
         """Register and create new user with hashed pw."""
@@ -59,5 +61,20 @@ class User(db.Model):
             # return user instance
             return user
         else:
-            return False       
+            return False   
+
+class Feedback(db.Model):
+    """Feedbacl model"""
+    
+    __tablename__ = 'feedback'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(150),
+                      nullable=False)
+    content = db.Column(db.Text,
+                        nullable=False)
+    username = db.Column(db.String(20),
+                         db.ForeignKey('users.username'),
+                         nullable=False)
+        
         

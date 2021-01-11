@@ -29,6 +29,18 @@ class LoginForm(FlaskForm):
 
 # un=mayday pw=mayday 
 
+class FeedbackForm(FlaskForm):
+    """Add feedback form."""
+
+    title = StringField(
+        "Title",
+        validators=[InputRequired(), Length(max=150)],
+    )
+    content = StringField(
+        "Content",
+        validators=[InputRequired()],
+    )
+
 
 
 class DeleteForm(FlaskForm):
